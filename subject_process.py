@@ -16,7 +16,7 @@ class Subject:
         writer=PdfFileWriter()
         
 ### Chưa xử lý trang TÀI LIỆU THAM KHẢO
-        for page in range(1,file_pages-1):
+        for page in range(1,file_pages):
             writer.addPage(reader.getPage(page))
 
         output_file ='pdf_file/'+self.id_subject+'/temp.pdf'
@@ -24,37 +24,19 @@ class Subject:
             writer.write(output)           
         text = data_func.convert_pdf_to_string(output_file)
         os.remove(output_file)
+       
+        text=data_func.remove_speChar(text)
 
-        ## remove special character
-        text=text.replace('\x0c','')
-        text=text.replace('*','')
-        text=text.replace('-','')
-        text=text.replace('+','')
-        text=text.replace('●','')
-        text=text.replace('=>','')  
-        text=text.replace('%','')   
-        text=text.replace('/','')  
-        text=text.replace('(','')  
-        text=text.replace(')','')    
-        text=text.replace('?','') 
-        text=text.replace(',','')
-        text=text.replace(';','')
-        text=text.replace(':','')  
-        text=text.replace('“','')
-        text=text.replace('”','')
-        text=text.replace('"','')
         ## remove all number
         for char in text:
             if char.isdigit():
                 text=text.replace(char,'')
-
         text=text.strip()
-
         if not os.path.exists('data/'+self.id_subject):
             os.makedirs('data/'+self.id_subject)
 
         with open("data/"+self.id_subject+'/'+pdf_file[:-4]+".txt",'w', encoding='utf-8') as textFile:
-            # write and remove multi spaces
+            #textFile.write(text.strip())
             textFile.write(' '.join(text.split()))
 
 def main(id_subject):
@@ -65,5 +47,4 @@ def main(id_subject):
 
 print('WORKING.....')
 main('sub1')
-main('sub2')
 print("FINISHED!!")

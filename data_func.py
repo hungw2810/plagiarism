@@ -64,7 +64,16 @@ def dictionary(subject):
         vocab[i]=vocab[i].lower()
     return vocab
 
-print(len(dictionary('sub1')))
+def remove_speChar(input_str):
+    with open('stopwords.txt','r',encoding='utf-8') as f:
+        stopwords=f.read().split()
+        # speChar=speChar.replace('\t','')
+        # speChar=speChar.split('\n')
+    input_str=word_tokenize(input_str,format="text")
+    textquerry=input_str.split()
+    resultword=[word for word in textquerry if word.lower() not in stopwords]
+    result=' '.join(resultword)
+    return result.lower()
 
 
 
