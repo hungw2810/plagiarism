@@ -1,5 +1,7 @@
+from enum import unique
 from io import StringIO
 import os
+from typing_extensions import final
 
 from underthesea import word_tokenize
 from underthesea import sent_tokenize
@@ -47,34 +49,64 @@ def split_to_title_and_pagenum(table_of_contents_entry):
         
     return title, pagenum
 
-def dictionary(subject):
-    sentences=''
-    subject_dir='data/'+subject
-    for text_file in os.listdir(subject_dir):
-        with open(subject_dir+'/'+text_file,'r',encoding='utf-8') as f:
-            sentences+=f.read()
-    sentences=word_tokenize(sentences,format='text')
-    words=sentences.split()
-
-    vocab=[]
-    [vocab.append(words[x]) for x in range(len(words)) if not words[x].__contains__('.')]
-
-    vocab=list(dict.fromkeys(vocab))
-    for i in range(len(vocab)):
-        vocab[i]=vocab[i].lower()
-    return vocab
-
 def remove_speChar(input_str):
-    with open('stopwords.txt','r',encoding='utf-8') as f:
-        stopwords=f.read().split()
-        # speChar=speChar.replace('\t','')
-        # speChar=speChar.split('\n')
-    input_str=word_tokenize(input_str,format="text")
-    textquerry=input_str.split()
-    resultword=[word for word in textquerry if word.lower() not in stopwords]
-    result=' '.join(resultword)
-    return result.lower()
+    with open('specialChar.txt','r',encoding='utf-8') as f:
+        specialChar=f.read().split()
+    for char in specialChar:
+        input_str=input_str.replace(char,'')
+    return input_str
+
+def read_allTextFile():
+    text=''
+    for folder in os.listdir('data'):
+        for textFile in os.listdir('data/'+folder):
+            with open('data/'+folder+'/'+textFile,'r',encoding='utf-8') as f:
+                temp=f.read()
+                text+=temp+' '
+    return text
+
+def get_uniqueList(list_input):
+    unique=[]
+    for string in list_input:
+        if string not in unique:
+            unique.append(string)
+    return unique
 
 
+def generate_vocab(unique:bool):    
+    document= read_allTextFile()
+    document_array=document.split('.')
+    doc_array=[]
 
+    for i in range(len(document_array)):
+        if document_array[i]!='' and not document_array[i].isspace():
+            doc_array.append(remove_speChar(document_array[i]))
+
+    for i in range (len(doc_array)):
+        temp=word_tokenize(doc_array[i],format='text')
+        doc_array[i]=temp.lower()
+
+    temp_vocab=[]
+    for i in range(len(doc_array)):
+        temp=doc_array[i].split()
+        temp_vocab.extend(temp)
+    
+    final_vocal=[]
+    with open('dic.txt','r',encoding='utf-8') as f:
+        temp_dict=f.read()
+        underthesea_words=temp_dict.split('\n')
+
+# 2 MODE -> TRUE : unique 
+#       -> FALSE : simple
+    if unique == True:
+        unique_vocab=get_uniqueList(temp_vocab)
+        for element in unique_vocab:
+            if element in underthesea_words:
+                final_vocal.append(element)
+        return final_vocal
+    else:
+        for element in temp_vocab:
+            if element in underthesea_words:
+                final_vocal.append(element)
+        return final_vocal
 
