@@ -73,40 +73,42 @@ def get_uniqueList(list_input):
     return unique
 
 
-def generate_vocab(unique:bool):    
-    document= read_allTextFile()
-    document_array=document.split('.')
-    doc_array=[]
-
-    for i in range(len(document_array)):
-        if document_array[i]!='' and not document_array[i].isspace():
-            doc_array.append(remove_speChar(document_array[i]))
-
-    for i in range (len(doc_array)):
-        temp=word_tokenize(doc_array[i],format='text')
-        doc_array[i]=temp.lower()
-
-    temp_vocab=[]
-    for i in range(len(doc_array)):
-        temp=doc_array[i].split()
-        temp_vocab.extend(temp)
-    
+def generate_vocab(unique:bool,directory=None):  
     final_vocal=[]
+    raw_vocab=[] # have undefined word
+    sent_array=[]
+
+    #read vietnamese dictionary 
     with open('dic.txt','r',encoding='utf-8') as f:
         temp_dict=f.read()
         underthesea_words=temp_dict.split('\n')
 
+    #create global vocab
+    if directory is None:
+        sentences=read_allTextFile().split('.')
+        
+    elif directory is not None:
+        with open(directory,'r',encoding='utf-8') as f:
+            sentences=f.read().split('.')       
+
+    #remove spe characters
+    for i in range(len(sentences)):
+        if sentences[i] != '' and not sentences[i].isspace():
+            sent_array.append(remove_speChar(sentences[i]))
+
+    #tokenize word & append to raw vocab
+    for i in range (len(sent_array)):
+        temp=word_tokenize(sent_array[i],format='text')
+        sent_array[i]=temp.lower()
+        temp=sent_array[i].split()
+        raw_vocab.extend(temp)
+    for word in raw_vocab:
+        if word in underthesea_words:
+           final_vocal.append(word) 
+
 # 2 MODE -> TRUE : unique 
 #       -> FALSE : simple
     if unique == True:
-        unique_vocab=get_uniqueList(temp_vocab)
-        for element in unique_vocab:
-            if element in underthesea_words:
-                final_vocal.append(element)
+        unique_vocab=get_uniqueList(final_vocal)
         return final_vocal
-    else:
-        for element in temp_vocab:
-            if element in underthesea_words:
-                final_vocal.append(element)
-        return final_vocal
-
+    return final_vocal

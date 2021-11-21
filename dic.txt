@@ -27753,7 +27753,6 @@ há_mõm
 há_mồm
 há_nỡ
 hạ
-hạ
 hạ_áp
 hạ_âm
 hạ_bạc
@@ -34609,7 +34608,6 @@ kuna
 kủo
 kuýp
 kw
-kw
 kw-h
 kwacha
 kwanza
@@ -34691,8 +34689,6 @@ kỵ_khí
 kỵ_mã
 kỵ_sĩ
 kyat
-l,l
-l
 l
 la
 la_bàn
@@ -36070,7 +36066,8 @@ lẹt_quẹt
 lẹt_xẹt
 leu
 lev
-lê
+lenin
+lê-nin
 lê
 lê_dân
 lê-dương
@@ -70520,6 +70517,7 @@ vù
 vù_hương
 vù_vù
 vũ
+vũ_đại
 vũ_an
 vũ_bão
 vũ_bị
@@ -74171,7 +74169,6 @@ ký_túc_xá
 ký_tự
 kỷ_vật
 kỳ_vĩ
-l,l
 la_nina
 lách_nhách
 lai_dắt
