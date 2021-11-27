@@ -6,46 +6,63 @@ from underthesea import word_tokenize
 from underthesea import sent_tokenize
 import re
 
-class Subject:
-    def __init__(self,id_subject) -> None:
-        self.id_subject=id_subject
-
-    def convertPDF2Text(self,pdf_file):
-        reader=PdfFileReader('pdf_file/'+self.id_subject+'/'+pdf_file)
-        file_pages=reader.numPages
-        writer=PdfFileWriter()
-        
-        for page in range(1,file_pages):
-            writer.addPage(reader.getPage(page))
-
-        output_file ='pdf_file/'+self.id_subject+'/temp.pdf'
-        with open(output_file,'wb') as output:
-            writer.write(output)           
-        text = data_func.convert_pdf_to_string(output_file)
-        os.remove(output_file)
-
-        # remove punctuation and stopwords
-        text=data_func.remove_speChar(text)
-
-        ## remove all number
-        for char in text:
-            if char.isdigit():
-                text=text.replace(char,'')
-
-        text=text.strip()
-        
-        if not os.path.exists('data/'+self.id_subject):
-            os.makedirs('data/'+self.id_subject)
-
-        with open("data/"+self.id_subject+'/'+pdf_file[:-4]+".txt",'w', encoding='utf-8') as textFile:
-            textFile.write(' '.join(text.split()))
-
-def main(id_subject):
-    subject=Subject(id_subject)
-    for file in os.listdir('pdf_file/'+id_subject):
+def convertPDF2Text(directory):
+    for file in os.listdir(directory):
         if file.endswith('.pdf') and file != 'temp.pdf':
-            subject.convertPDF2Text(file)
+            direcPDF=directory+'/'+file
+            reader=PdfFileReader(direcPDF)
+            file_pages=reader.numPages
+            writer=PdfFileWriter()
+            
+            for page in range(1,file_pages):
+                writer.addPage(reader.getPage(page))
 
-# print('WORKING.....')
-# main('sub1')
-# print("FINISHED!!")
+            output_file =directory+'/temp.pdf'
+            with open(output_file,'wb') as output:
+                writer.write(output)           
+            text = data_func.convert_pdf_to_string(output_file)
+            os.remove(output_file)
+
+            # remove punctuation and stopwords
+            text=data_func.remove_speChar(text)
+
+            ## remove all number
+            for char in text:
+                if char.isdigit():
+                    text=text.replace(char,'')
+            text=text.strip()
+            txtDirectory=directory+'/'+ file[:-4]+".txt"
+            with open(txtDirectory,'w', encoding='utf-8') as textFile:
+                textFile.write(' '.join(text.split()))
+
+
+#### chua xong#####
+def tokenize(directory):
+    sent_array=[]
+    for file in os.listdir(directory):
+        if file.endswith('.txt'):
+            with open(directory+'/'+file,'r',encoding='utf-8') as textFile:
+                document=textFile.read()   
+            sentences=document.split('.')
+            for i in range(len(sentences)):
+                if sentences[i] != '' and not sentences[i].isspace():
+                    sent_array.append(data_func.remove_speChar(sentences[i]))
+            
+            for i in range (len(sent_array)):
+                temp=word_tokenize(sent_array[i],format='text')
+                sent_array[i]=temp.lower()
+            
+            with open(directory+'/'+file,'w',encoding='utf-8') as textFile:
+                for sent in sent_array:
+                    textFile.write(sent+'\n')
+
+
+
+
+
+print('Enter directory contain pdf input')
+directory=input()
+print('Working')
+convertPDF2Text(directory)
+tokenize(directory)
+print('Finished')

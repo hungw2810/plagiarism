@@ -40545,6 +40545,7 @@ mồm_năm_miệng_mười
 mồm_như_quạ_cái
 mồm_nói_như_sẹo_gỗ
 môn
+môn_dữ_liệu
 môn_bài
 môn_đăng_hộ_đối
 môn_đệ
