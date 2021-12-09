@@ -1,17 +1,15 @@
-Case 1: 
-INPUT : một list file pdf
-OUTPUT : score của từng bài
+--> xử lý cho dữ liệu nội sinh
+- Dùng meta data lược bỏ trang BÌA, MỤC LỤC, TÀI LIỆU THAM KHẢO
+- Convert sang text
+- Tạo model đưa câu thành 1 câu chứa 3-gram
+- Chuyển tất cả file text trong data qua model để xử lý
 
-Task 1: Convert to txt file - removed special characters (done) 
-Task 2: Tokenize sentences (use underthesea - word_tokenize)    (created function)
-Task 3: Standardize data ( Remove stopwords, lower string )  (created function)
-
-
-Case 2: 
-INPUT : 1 file pdf
-OUTPUT : score của input
-
+Đưa tài liệu vào kiểm tra 
+- Tìm ra 100 tài liệu nội sinh tiềm năng
+- Tạo vocab (chứa 3-gram) của 101 tài liệu
+- Embedding
+- Consin similarity từng cặp 
 
 
-
-
+việt nam đẹp lắm ta ơi
+-> việt nam đẹp lắm ta ơi việt_nam_đẹp nam_đẹp_lắm đẹp_lắm_ta lắm_ta_ơi
